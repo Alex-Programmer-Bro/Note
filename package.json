@@ -1,24 +1,22 @@
 {
-  "name": "@editorjs/marker",
+  "name": "@editorjs/note",
   "version": "1.4.0",
   "keywords": [
     "codex editor",
-    "marker",
+    "note",
     "editor.js",
     "editorjs"
   ],
-  "description": "Marker Tool for Editor.js",
   "license": "MIT",
-  "repository": "https://github.com/editor-js/marker",
   "files": [
     "dist"
   ],
-  "main": "./dist/marker.umd.js",
-  "module": "./dist/marker.mjs",
+  "main": "./dist/note.umd.js",
+  "module": "./dist/note.mjs",
   "exports": {
     ".": {
-      "import": "./dist/marker.mjs",
-      "require": "./dist/marker.umd.js"
+      "import": "./dist/note.mjs",
+      "require": "./dist/note.umd.js"
     }
   },
   "scripts": {

@@ -9,7 +9,7 @@ import { IconMarker } from '@codexteam/icons'
  *
  * Allows to wrap inline fragment and style it somehow.
  */
- export default class Marker {
+export default class Note {
   /**
    * Class name for term-tag
    *
@@ -19,10 +19,12 @@ import { IconMarker } from '@codexteam/icons'
     return 'cdx-marker';
   };
 
+  static title = 'Note';
+
   /**
    * @param {{api: object}}  - Editor.js API
    */
-  constructor({api}) {
+  constructor({ api }) {
     this.api = api;
 
     /**
@@ -67,7 +69,6 @@ import { IconMarker } from '@codexteam/icons'
     this.button.type = 'button';
     this.button.classList.add(this.iconClasses.base);
     this.button.innerHTML = this.toolboxIcon;
-
     return this.button;
   }
 
@@ -81,7 +82,7 @@ import { IconMarker } from '@codexteam/icons'
       return;
     }
 
-    let termWrapper = this.api.selection.findParentTag(this.tag, Marker.CSS);
+    let termWrapper = this.api.selection.findParentTag(this.tag, Note.CSS);
 
     /**
      * If start or end of selection is in the highlighted block
@@ -104,7 +105,7 @@ import { IconMarker } from '@codexteam/icons'
      */
     let marker = document.createElement(this.tag);
 
-    marker.classList.add(Marker.CSS);
+    marker.classList.add(Note.CSS);
 
     /**
      * SurroundContent throws an error if the Range splits a non-Text node with only one of its boundary points
@@ -158,7 +159,7 @@ import { IconMarker } from '@codexteam/icons'
    * Check and change Term's state for current selection
    */
   checkState() {
-    const termTag = this.api.selection.findParentTag(this.tag, Marker.CSS);
+    const termTag = this.api.selection.findParentTag(this.tag, Note.CSS);
 
     this.button.classList.toggle(this.iconClasses.active, !!termTag);
   }
@@ -178,7 +179,7 @@ import { IconMarker } from '@codexteam/icons'
   static get sanitize() {
     return {
       mark: {
-        class: Marker.CSS
+        class: Note.CSS
       }
     };
   }

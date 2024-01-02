@@ -18,14 +18,12 @@
   <div id="editorjs"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
-  <script src="../dist/marker.umd.js"></script>
+  <script src="../dist/note.umd.js"></script>
   <script>
     const editor = new EditorJS({
       holder: 'editorjs',
       tools: {
-        Marker: {
-          class: Marker,
-        }
+        Marker: Note
       },
       onChange() {
         editor.save().then(async (outputData) => {

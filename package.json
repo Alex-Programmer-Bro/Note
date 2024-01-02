@@ -22,7 +22,7 @@
     }
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "onchange 'src/*.js' 'src/*.css' -- npm run build",
     "build": "vite build"
   },
   "author": {
@@ -30,6 +30,7 @@
     "email": "team@codex.so"
   },
   "devDependencies": {
+    "onchange": "^7.1.0",
     "vite": "^4.5.0",
     "vite-plugin-css-injected-by-js": "^3.3.0"
   },

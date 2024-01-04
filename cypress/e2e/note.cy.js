@@ -17,6 +17,7 @@ describe('note', () => {
     cy.get('[data-tool="Note"]').click();
     cy.get('note').should('be.visible').click();
     cy.selectText('hello world');
-    cy.get('[data-tool="Note"]').should('have.not.class', 'ce-inline-tool--active');
+    cy.get('[data-tool="Note"]').should('have.not.class', 'ce-inline-tool--active').click();
+    cy.get('body').find('note').its('length').should('eq', 2);
   })
 });

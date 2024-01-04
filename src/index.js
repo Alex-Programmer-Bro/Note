@@ -5,9 +5,9 @@ import './index.css';
 import { IconMarker } from '@codexteam/icons'
 
 /**
- * Marker Tool for the Editor.js
+ * Note Tool for the Editor.js
  *
- * Allows to wrap inline fragment and style it somehow.
+ * Create and Edit note
  */
 export default class Note {
   /**
@@ -16,7 +16,10 @@ export default class Note {
    * @type {string}
    */
   static get CSS() {
-    return 'cdx-marker';
+    return 'cdx-note';
+  };
+  static get shortcut() {
+    return 'CMD+E';
   };
 
   static title = 'Note';
@@ -39,7 +42,7 @@ export default class Note {
      *
      * @type {string}
      */
-    this.tag = 'MARK';
+    this.tag = 'NOTE';
 
     /**
      * CSS classes
@@ -103,9 +106,9 @@ export default class Note {
     /**
      * Create a wrapper for highlighting
      */
-    let marker = document.createElement(this.tag);
+    let note = document.createElement(this.tag);
 
-    marker.classList.add(Note.CSS);
+    note.classList.add(Note.CSS);
 
     /**
      * SurroundContent throws an error if the Range splits a non-Text node with only one of its boundary points
@@ -113,13 +116,13 @@ export default class Note {
      *
      * // range.surroundContents(span);
      */
-    marker.appendChild(range.extractContents());
-    range.insertNode(marker);
+    note.appendChild(range.extractContents());
+    range.insertNode(note);
 
     /**
      * Expand (add) selection to highlighted block
      */
-    this.api.selection.expandToTag(marker);
+    this.api.selection.expandToTag(note);
   }
 
   /**

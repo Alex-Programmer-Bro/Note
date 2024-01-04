@@ -3,3 +3,5 @@ npm-debug.log
 .idea/*
 .DS_Store
 dist
+yarn.lock
+bun.lockb

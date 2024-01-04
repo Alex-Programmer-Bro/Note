@@ -1,25 +1,27 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('selectText', function(text) {
+  cy.contains(text).then(($el) => {
+    const el = $el[0];
+    const document = el.ownerDocument;
+    
+    const range = document.createRange();
+    range.selectNodeContents(el);
+
+    const fullText = el.textContent || "";
+    const startIndex = fullText.indexOf(text);
+    const endIndex = startIndex + text.length;
+
+    if (startIndex !== -1 && endIndex !== -1) {
+      range.setStart(el.firstChild, startIndex);
+      range.setEnd(el.firstChild, endIndex);
+
+      const selection = document.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      $el.trigger('mouseup');
+      cy.document().trigger('selectionchange');
+    } else {
+      throw new Error(`The text "${text}" was not found in the element`);
+    }
+  });
+});

@@ -161,9 +161,14 @@ export default class Note {
   /**
    * Check and change Term's state for current selection
    */
-  checkState() {
-    const termTag = this.api.selection.findParentTag(this.tag, Note.CSS);
+  checkState(selection) {
+    const nested = Boolean(selection.anchorNode.nextElementSibling) && selection.anchorNode.nextElementSibling.tagName === 'NOTE';
+    if (nested) {
+      this.button.classList.toggle(this.iconClasses.active, false);
+      return;
+    }
 
+    const termTag = this.api.selection.findParentTag(this.tag, Note.CSS);
     this.button.classList.toggle(this.iconClasses.active, !!termTag);
   }
 

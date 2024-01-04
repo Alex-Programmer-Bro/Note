@@ -9,7 +9,6 @@
     #editorjs {
       width: 800px;
       height: 600px;
-      background-color: #ddd;
     }
   </style>
 </head>
@@ -25,11 +24,6 @@
       tools: {
         Note
       },
-      onChange() {
-        editor.save().then(async (outputData) => {
-          console.log(outputData)
-        })
-      }
     });
   </script>
 </body>

@@ -43,10 +43,13 @@ Cypress.Commands.add('selectText', function (text) {
   });
 });
 
-
-
 Cypress.Commands.add('expectStyle', (selector, styles = {}) => {
   for (const key in styles) {
     cy.get(selector).should('have.css', key, styles[key])
   }
+})
+
+Cypress.Commands.add('reloadPL', () => {
+  cy.wait(500);
+  cy.reload();
 })

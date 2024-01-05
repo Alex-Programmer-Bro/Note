@@ -19,19 +19,19 @@
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
   <script src="../dist/note.umd.js"></script>
   <script>
+    const cache = localStorage.getItem('outputdata');
     const editor = new EditorJS({
       holder: 'editorjs',
+      data: JSON.parse(cache) || {},
       tools: {
         Note
       },
-      onChange(){
+      onChange() {
         editor.save().then(noteData => {
-          window.noteData = noteData;
+          localStorage.setItem('outputdata', JSON.stringify(noteData));
         })
       }
     });
-
-    window.editor = editor;
   </script>
 </body>
 

@@ -4,6 +4,18 @@
 import './index.css';
 import { IconMarker } from '@codexteam/icons'
 
+function getSelectedTextParentElement(range) {
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
+    let container = range.commonAncestorContainer;
+    while (container && container.nodeType !== Node.ELEMENT_NODE) {
+      container = container.parentNode;
+    }
+    return container;
+  }
+  return null;
+}
+
 /**
  * Note Tool for the Editor.js
  *
@@ -86,11 +98,13 @@ export default class Note {
     }
 
     let termWrapper = this.api.selection.findParentTag(this.tag, Note.CSS);
+    const parentElement = getSelectedTextParentElement(range);
+    const hasNote = Boolean(parentElement.querySelector(this.tag));
 
     /**
      * If start or end of selection is in the highlighted block
      */
-    if (termWrapper) {
+    if (termWrapper && !hasNote) {
       this.unwrap(termWrapper);
     } else {
       this.wrap(range);
@@ -122,6 +136,7 @@ export default class Note {
     /**
      * Expand (add) selection to highlighted block
      */
+    console.log(console.log(note));
     this.api.selection.expandToTag(note);
   }
 

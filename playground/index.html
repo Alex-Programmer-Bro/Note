@@ -24,7 +24,14 @@
       tools: {
         Note
       },
+      onChange(){
+        editor.save().then(noteData => {
+          window.noteData = noteData;
+        })
+      }
     });
+
+    window.editor = editor;
   </script>
 </body>
 

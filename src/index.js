@@ -16,6 +16,17 @@ function getSelectedTextParentElement(range) {
   return null;
 }
 
+function generateId(length = 6) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+
 /**
  * Note Tool for the Editor.js
  *
@@ -136,7 +147,13 @@ export default class Note {
     /**
      * Expand (add) selection to highlighted block
      */
-    console.log(console.log(note));
+    if (note.nextElementSibling && note.nextElementSibling.textContent.trim() === '') {
+      note.nextElementSibling.remove();
+    }
+
+    if (note.firstElementChild && note.firstElementChild.tagName === this.tag) {
+      note.firstElementChild.setAttribute('note-id', generateId());
+    }
     this.api.selection.expandToTag(note);
   }
 
@@ -201,10 +218,10 @@ export default class Note {
    */
   static get sanitize() {
     return {
-      mark: {
-        class: Note.CSS
+      note: {
+        class: Note.CSS,
+        'note-id': true
       }
     };
   }
 }
-

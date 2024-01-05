@@ -20,7 +20,7 @@
     }
   },
   "scripts": {
-    "dev": "onchange 'src/*.js' 'src/*.css' -- npm run build",
+    "dev": "vite build && onchange 'src/*.js' 'src/*.css' -- npm run build",
     "build": "vite build"
   },
   "author": {

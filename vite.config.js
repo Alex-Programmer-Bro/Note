@@ -17,7 +17,7 @@ export default {
   define: {
     NODE_ENV: JSON.stringify(NODE_ENV),
     VERSION: JSON.stringify(VERSION),
+    'process.env': {}
   },
-
   plugins: [cssInjectedByJsPlugin()],
 };

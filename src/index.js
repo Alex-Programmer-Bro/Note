@@ -3,6 +3,8 @@
  */
 import './index.css';
 import { IconMarker } from '@codexteam/icons'
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
 
 function getSelectedTextParentElement(range) {
   const selection = window.getSelection();
@@ -26,6 +28,17 @@ function generateId(length = 6) {
   return result;
 }
 
+function mountedNote(element) {
+  const tipContainer = document.createElement('div');
+  tipContainer.innerHTML = `
+    <h2>tipjs<h2>
+  `;
+  return tippy(element, {
+    allowHTML: true,
+    arrow: true,
+    content: tipContainer,
+  });
+}
 
 /**
  * Note Tool for the Editor.js
@@ -46,6 +59,8 @@ export default class Note {
   };
 
   static title = 'Note';
+
+  mountedTip = [];
 
   /**
    * @param {{api: object}}  - Editor.js API
@@ -155,6 +170,11 @@ export default class Note {
       note.firstElementChild.setAttribute('note-id', generateId());
     }
     this.api.selection.expandToTag(note);
+    
+    note.onclick = () => {
+      console.log('hello')
+      this.mountedTip.push(mountedNote(note));
+    }
   }
 
   /**
@@ -210,6 +230,12 @@ export default class Note {
    */
   get toolboxIcon() {
     return IconMarker;
+  }
+
+  clear() {
+    this.mountedTip.forEach(item => {
+      item.destroy();
+    })
   }
 
   /**

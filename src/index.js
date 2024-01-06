@@ -54,7 +54,7 @@ export default class Note {
    */
   constructor({ api, config }) {
     this.api = api;
-    this.getInstance = config.getInstance;
+    this.save = config.getSaveAPI();
 
     /**
      * Toolbar Button
@@ -90,6 +90,8 @@ export default class Note {
 
   mountedNote(element) {
     const noteEditor = document.createElement('textarea');
+    noteEditor.oninput = () => {
+    }
     noteEditor.classList.add('note-editor')
     noteEditor.onclick = e => {
       instance.show();
@@ -99,11 +101,6 @@ export default class Note {
       content: noteEditor,
       trigger: 'click',
       theme: 'light',
-      onShow() {
-        setTimeout(() => {
-          noteEditor.focus();
-        });
-      }
     });
   }
 
@@ -243,7 +240,7 @@ export default class Note {
     return {
       note: {
         class: Note.CSS,
-        'note-id': true
+        'note-id': true,
       }
     };
   }

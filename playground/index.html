@@ -24,10 +24,16 @@
       holder: 'editorjs',
       data: JSON.parse(cache) || {},
       tools: {
-        Note
+        note: {
+          class: Note,
+          config: {
+            getSaveAPI: () => editor.save
+          }
+        }
       },
       onChange() {
         editor.save().then(noteData => {
+          console.log(noteData);
           localStorage.setItem('outputdata', JSON.stringify(noteData));
         })
       }

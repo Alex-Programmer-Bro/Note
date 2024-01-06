@@ -29,22 +29,6 @@ function generateId(length = 6) {
   return result;
 }
 
-function mountedNote(element) {
-  const tipContainer = document.createElement('div');
-  tipContainer.onclick = e => {
-    instance.show();
-  }
-  tipContainer.innerHTML = `
-    <h2>tipjs<h2>
-  `;
-  const instance = tippy(element, {
-    arrow: true,
-    content: tipContainer,
-    trigger: 'click',
-    theme: 'light'
-  });
-}
-
 /**
  * Note Tool for the Editor.js
  *
@@ -68,8 +52,9 @@ export default class Note {
   /**
    * @param {{api: object}}  - Editor.js API
    */
-  constructor({ api }) {
+  constructor({ api, config }) {
     this.api = api;
+    this.getInstance = config.getInstance;
 
     /**
      * Toolbar Button
@@ -101,6 +86,25 @@ export default class Note {
    */
   static get isInline() {
     return true;
+  }
+
+  mountedNote(element) {
+    const noteEditor = document.createElement('textarea');
+    noteEditor.classList.add('note-editor')
+    noteEditor.onclick = e => {
+      instance.show();
+    }
+    const instance = tippy(element, {
+      arrow: true,
+      content: noteEditor,
+      trigger: 'click',
+      theme: 'light',
+      onShow() {
+        setTimeout(() => {
+          noteEditor.focus();
+        });
+      }
+    });
   }
 
   /**
@@ -173,7 +177,7 @@ export default class Note {
       note.firstElementChild.setAttribute('note-id', generateId());
     }
     this.api.selection.expandToTag(note);
-    mountedNote(note);
+    this.mountedNote(note);
   }
 
   /**

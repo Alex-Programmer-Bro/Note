@@ -7,6 +7,12 @@
   background-color: rgb(221, 221, 221);
 }
 
-div[data-tippy-root]{
+div[data-tippy-root] {
   pointer-events: initial !important;
+}
+
+.note-editor {
+  border: none;
+  outline: none;
+  resize: none;
 }

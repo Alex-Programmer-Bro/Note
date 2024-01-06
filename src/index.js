@@ -5,6 +5,7 @@ import './index.css';
 import { IconMarker } from '@codexteam/icons'
 import tippy from 'tippy.js';
 import "tippy.js/dist/tippy.css";
+import 'tippy.js/themes/light.css';
 
 function getSelectedTextParentElement(range) {
   const selection = window.getSelection();
@@ -31,17 +32,16 @@ function generateId(length = 6) {
 function mountedNote(element) {
   const tipContainer = document.createElement('div');
   tipContainer.onclick = e => {
-    console.log('123');
+    instance.show();
   }
   tipContainer.innerHTML = `
     <h2>tipjs<h2>
   `;
-
-  tippy(element, {
+  const instance = tippy(element, {
     arrow: true,
     content: tipContainer,
     trigger: 'click',
-    zIndex: 999999999,
+    theme: 'light'
   });
 }
 

@@ -1,6 +1,6 @@
 {
-  "name": "@editorjs/note",
-  "version": "1.4.0",
+  "name": "editorjs-note",
+  "version": "0.0.1",
   "keywords": [
     "codex editor",
     "note",
@@ -21,7 +21,12 @@
   },
   "scripts": {
     "dev": "vite build && onchange 'src/*.js' 'src/*.css' -- npm run build",
-    "build": "vite build"
+    "build": "vite build",
+    "prepublish": "cypress run && npm run build"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "author": {
     "name": "CodeX",

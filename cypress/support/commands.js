@@ -50,6 +50,6 @@ Cypress.Commands.add('expectStyle', (selector, styles = {}) => {
 })
 
 Cypress.Commands.add('reloadPL', () => {
-  cy.wait(500);
+  cy.wait(100);
   cy.reload();
 })

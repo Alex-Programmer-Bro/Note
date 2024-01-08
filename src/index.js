@@ -26,6 +26,8 @@ function generateId(length = 6) {
   return result;
 }
 
+const loaded = {};
+
 /**
  * Note Tool for the Editor.js
  *
@@ -52,13 +54,49 @@ export default class Note {
       base: this.api.styles.inlineToolButton,
       active: this.api.styles.inlineToolButtonActive
     };
+
+    this.initMount();
   }
 
   static get isInline() {
     return true;
   }
 
-  mountedNote(element) {
+  async getNoteById(id) {
+    const durtation = 300;
+    let queryCount = 0;
+    const query = () => {
+      return new Promise(async (resolve, rejected) => {
+        const result = document.querySelector(`note[note-id="${id}"]`);
+        if (result) {
+          resolve(result);
+        } else {
+          if (queryCount > 10) {
+            rejected('Note element is not exist');
+          }
+
+          queryCount++;
+          setTimeout(() => {
+            resolve(query());
+          }, durtation);
+        }
+      })
+    }
+    const note = await query();
+    return note;
+  }
+
+  async initMount() {
+    for (const id in this.data) {
+      if (loaded[id]) return;
+      loaded[id] = true;
+      const value = this.data[id];
+      const note = await this.getNoteById(id);
+      this.mountedNote(note, value);
+    }
+  }
+
+  mountedNote(element, value) {
     const content = document.createElement('div');
     content.onclick = e => {
       instance.show();
@@ -66,6 +104,7 @@ export default class Note {
     content.appendChild(this.editor);
 
     if (this.editor.tagName === 'TEXTAREA') {
+      this.editor.value = value || '';
       this.editor.oninput = () => {
         this.onNoteChange({ id: element.getAttribute('note-id'), content: this.editor.value })
       }

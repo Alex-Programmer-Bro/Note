@@ -20,12 +20,32 @@
   <script src="../dist/note.umd.js"></script>
   <script>
     const cache = localStorage.getItem('outputdata');
+    const cacheNote = localStorage.getItem('note');
+
+    const createEditor = () => {
+      const editor = document.createElement('textarea');
+      editor.style.height = '400px'
+      return editor;
+    }
+
+    const onNoteChange = ({ id, content }) => {
+      const cacheNote = localStorage.getItem('note');
+      const cache = cacheNote ? JSON.parse(cacheNote) : {};
+      cache[id] = content;
+      localStorage.setItem('note', JSON.stringify(cache));
+    }
+
     const editor = new EditorJS({
       holder: 'editorjs',
       data: JSON.parse(cache) || {},
       tools: {
         note: {
           class: Note,
+          config: {
+            data: cacheNote ? JSON.parse(cacheNote) : {},
+            onNoteChange,
+            editor: createEditor()
+          }
         }
       },
       onChange() {

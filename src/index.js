@@ -1,6 +1,3 @@
-/**
- * Build styles
- */
 import './index.css';
 import { IconMarker } from '@codexteam/icons'
 import tippy from 'tippy.js';
@@ -35,79 +32,53 @@ function generateId(length = 6) {
  * Create and Edit note
  */
 export default class Note {
-  /**
-   * Class name for term-tag
-   *
-   * @type {string}
-   */
   static get CSS() {
     return 'cdx-note';
   };
   static get shortcut() {
     return 'CMD+E';
   };
-
   static title = 'Note';
 
-  /**
-   * @param {{api: object}}  - Editor.js API
-   */
   constructor({ api, config }) {
     this.api = api;
-
-    /**
-     * Toolbar Button
-     *
-     * @type {HTMLElement|null}
-     */
+    this.editor = config.editor;
+    this.onNoteChange = config.onNoteChange;
+    this.data = config.data;
     this.button = null;
-
-    /**
-     * Tag represented the term
-     *
-     * @type {string}
-     */
     this.tag = 'NOTE';
 
-    /**
-     * CSS classes
-     */
     this.iconClasses = {
       base: this.api.styles.inlineToolButton,
       active: this.api.styles.inlineToolButtonActive
     };
   }
 
-  /**
-   * Specifies Tool as Inline Toolbar Tool
-   *
-   * @return {boolean}
-   */
   static get isInline() {
     return true;
   }
 
   mountedNote(element) {
-    const noteEditor = document.createElement('textarea');
-    noteEditor.oninput = () => {
-    }
-    noteEditor.classList.add('note-editor')
-    noteEditor.onclick = e => {
+    const content = document.createElement('div');
+    content.onclick = e => {
       instance.show();
     }
+    content.appendChild(this.editor);
+
+    if (this.editor.tagName === 'TEXTAREA') {
+      this.editor.oninput = () => {
+        this.onNoteChange({ id: element.getAttribute('note-id'), content: this.editor.value })
+      }
+    }
+
     const instance = tippy(element, {
       arrow: true,
-      content: noteEditor,
+      content: content,
       trigger: 'click',
       theme: 'light',
     });
   }
 
-  /**
-   * Create button element for Toolbar
-   *
-   * @return {HTMLElement}
-   */
   render() {
     this.button = document.createElement('button');
     this.button.type = 'button';
@@ -116,11 +87,6 @@ export default class Note {
     return this.button;
   }
 
-  /**
-   * Wrap/Unwrap selected fragment
-   *
-   * @param {Range} range - selected fragment
-   */
   surround(range) {
     if (!range) {
       return;
@@ -139,26 +105,11 @@ export default class Note {
       this.wrap(range);
     }
   }
-
-  /**
-   * Wrap selection with term-tag
-   *
-   * @param {Range} range - selected fragment
-   */
   wrap(range) {
-    /**
-     * Create a wrapper for highlighting
-     */
     let note = document.createElement(this.tag);
-
+    note.setAttribute('note-id', generateId());
     note.classList.add(Note.CSS);
 
-    /**
-     * SurroundContent throws an error if the Range splits a non-Text node with only one of its boundary points
-     * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Range/surroundContents}
-     *
-     * // range.surroundContents(span);
-     */
     note.appendChild(range.extractContents());
     range.insertNode(note);
 
@@ -166,15 +117,7 @@ export default class Note {
     this.mountedNote(note);
   }
 
-  /**
-   * Unwrap term-tag
-   *
-   * @param {HTMLElement} termWrapper - term wrapper tag
-   */
   unwrap(termWrapper) {
-    /**
-     * Expand selection to all term-tag
-     */
     this.api.selection.expandToTag(termWrapper);
 
     let sel = window.getSelection();
@@ -182,26 +125,13 @@ export default class Note {
 
     let unwrappedContent = range.extractContents();
 
-    /**
-     * Remove empty term-tag
-     */
     termWrapper.parentNode.removeChild(termWrapper);
-
-    /**
-     * Insert extracted content
-     */
     range.insertNode(unwrappedContent);
 
-    /**
-     * Restore selection
-     */
     sel.removeAllRanges();
     sel.addRange(range);
   }
 
-  /**
-   * Check and change Term's state for current selection
-   */
   checkState(selection) {
     const nested = Boolean(selection.anchorNode.nextElementSibling) && selection.anchorNode.nextElementSibling.tagName === 'NOTE';
     if (nested) {
@@ -213,18 +143,10 @@ export default class Note {
     this.button.classList.toggle(this.iconClasses.active, !!termTag);
   }
 
-  /**
-   * Get Tool icon's SVG
-   * @return {string}
-   */
   get toolboxIcon() {
     return IconMarker;
   }
 
-  /**
-   * Sanitizer rule
-   * @return {{mark: {class: string}}}
-   */
   static get sanitize() {
     return {
       note: {

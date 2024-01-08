@@ -162,16 +162,6 @@ export default class Note {
     note.appendChild(range.extractContents());
     range.insertNode(note);
 
-    /**
-     * Expand (add) selection to highlighted block
-     */
-    if (note.nextElementSibling && note.nextElementSibling.textContent.trim() === '') {
-      note.nextElementSibling.remove();
-    }
-
-    if (note.firstElementChild && note.firstElementChild.tagName === this.tag) {
-      note.firstElementChild.setAttribute('note-id', generateId());
-    }
     this.api.selection.expandToTag(note);
     this.mountedNote(note);
   }

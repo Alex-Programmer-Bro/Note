@@ -54,7 +54,6 @@ export default class Note {
    */
   constructor({ api, config }) {
     this.api = api;
-    this.save = config.getSaveAPI();
 
     /**
      * Toolbar Button
